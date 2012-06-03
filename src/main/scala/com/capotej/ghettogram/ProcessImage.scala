@@ -13,7 +13,6 @@ object ProcessImage {
 
 }
 
-
 class ProcessImage {
 
   var inputPath:Option[String] = None
@@ -41,11 +40,11 @@ class ProcessImage {
   }
 
   def contrast {
-    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 4,0% " + o))
+    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 15x30% " + o))
   }
 
-  def tiltshift {
-    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 15x30% " + o))
+  def blurMap {
+     applyFilter((i,o) => cmd("convert " + i + " -sparse-color Barycentric \'0,0 black 0,%h white\' -function polynomial 4,-4,1 " +  o))
   }
 
   def download {
@@ -58,7 +57,6 @@ class ProcessImage {
   def bytes = {
     download
     contrast
-    tiltshift
     val fis = new FileInputStream(outputPath.get)
     Stream.continually(fis.read).takeWhile(-1 !=).map(_.toByte).toArray
   }
