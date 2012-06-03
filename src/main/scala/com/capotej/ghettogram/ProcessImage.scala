@@ -31,12 +31,21 @@ class ProcessImage {
     executor.execute(cmdline)
   }
 
-  def contrast {
+  def applyFilter(f: Function2[String, String, Unit]) {
     inputPath foreach { path =>
       outputPath = Some("/tmp/" + rand)
+      inputPath = outputPath
       println("outputing to " + outputPath.get)
-      cmd("convert " + path + " -sigmoidal-contrast 4,0% " + outputPath.get)
+      f(path, outputPath.get)
     }
+  }
+
+  def contrast {
+    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 4,0% " + o))
+  }
+
+  def tiltshift {
+    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 15x30% " + o))
   }
 
   def download {
@@ -49,6 +58,7 @@ class ProcessImage {
   def bytes = {
     download
     contrast
+    tiltshift
     val fis = new FileInputStream(outputPath.get)
     Stream.continually(fis.read).takeWhile(-1 !=).map(_.toByte).toArray
   }
