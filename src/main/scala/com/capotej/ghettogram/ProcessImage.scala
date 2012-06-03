@@ -24,41 +24,49 @@ class ProcessImage {
   }
 
   def cmd(str: String) = {
+    println("running " + str)
     val cmdline = CommandLine.parse(str)
     val executor = new DefaultExecutor
-    executor.setWorkingDirectory(new java.io.File("/tmp"))
+    executor.setWorkingDirectory(new java.io.File("."))
     executor.execute(cmdline)
   }
 
   def applyFilter(f: Function2[String, String, Unit]) {
     inputPath foreach { path =>
-      outputPath = Some("/tmp/" + rand)
+      outputPath = Some("public/" + rand + ".gif")
       inputPath = outputPath
-      println("outputing to " + outputPath.get)
       f(path, outputPath.get)
     }
   }
 
   def contrast {
-    applyFilter((i,o) => cmd("convert " + i + " -sigmoidal-contrast 15x30% " + o))
+    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -sigmoidal-contrast 15x30% " + o))
   }
 
-  def blurMap {
-     applyFilter((i,o) => cmd("convert " + i + " -sparse-color Barycentric \'0,0 black 0,%h white\' -function polynomial 4,-4,1 " +  o))
+  def vignette {
+    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -matte -background none -vignette 0x3 " + o))
+  }
+
+  def painting {
+    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -paint 1 " + o))
   }
 
   def download {
-    src foreach { url =>
-      inputPath = Some("/tmp/" + rand)
-      cmd("curl -o " + inputPath.get + " " + url)
+    src foreach { rawUrl =>
+      val url = rawUrl.toLowerCase
+      if(url.contains("jpg") || url.contains("png") || url.contains("jpeg")){
+        inputPath = Some("/tmp/" + rand)
+        cmd("curl -o " + inputPath.get + " " + rawUrl)
+      }
     }
   }
 
   def bytes = {
     download
     contrast
-    val fis = new FileInputStream(outputPath.get)
-    Stream.continually(fis.read).takeWhile(-1 !=).map(_.toByte).toArray
+    painting
+    vignette
+    outputPath.get.split("/").last.mkString
   }
 
 }
