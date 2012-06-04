@@ -37,7 +37,7 @@ class ProcessImage {
 
   def applyFilter(f: Function2[String, String, Unit]) {
     inputPath foreach { path =>
-      outputPath = Some("public/" + rand + ".gif")
+      outputPath = Some("public/" + rand)// + ".gif")
       inputPath = outputPath
       f(path, outputPath.get)
     }
