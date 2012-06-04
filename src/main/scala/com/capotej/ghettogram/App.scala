@@ -9,17 +9,20 @@ object App {
   class GhettoGram extends FinatraApp{
 
     get("/") { r =>
-      val ra = new RecipeAdmin(r.params.get("recipe").getOrElse("contrast"))
+      val recipe = r.params.get("recipe").getOrElse("contrast")
+      val src = r.params.get("src").getOrElse("http://i.imgur.com/D3XNI.jpg")
+      val ra = new RecipeAdmin(recipe, src)
       render(path="index.mustache", exports=ra)
     }
 
     post("/saveRecipe") { r =>
       val name = r.params.get("name")
       val content = r.params.get("content")
-      if (name.isDefined && content.isDefined) {
+      val src = r.params.get("src")
+      if (name.isDefined && content.isDefined && src.isDefined) {
         ImageRecipes.db.put(name.get, content.get)
         ImageRecipes.save
-        redirect("/?recipe=" + name.get)
+        redirect("/?recipe=" + name.get + "&src=" + src.get)
       } else {
         response(status=500, body="sucks")
       }

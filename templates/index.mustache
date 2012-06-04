@@ -3,8 +3,15 @@
     <form action="/saveRecipe" method="post">
       <h1>Recipe: <input type="text" name="name" value="{{currentRecipeName}}"></input>(<a href="/remove?recipe={{currentRecipeName}}">delete</a>)</h1></br>
       <input name="content" type="text" style="width: 400px" value="{{currentRecipe}}"></input>
-      <input type="submit" class="btn" style="position: relative; bottom: 5px"></input><hr>
-      <img width="70%" src="{{src}}">
+      <input name="src" type="hidden" value="{{currentSrc}}"></input>
+      <input type="submit" class="btn" value="Save" style="position: relative; bottom: 5px"></input>
+    </form>
+    <hr>
+    <form action="/" method="get">
+      <input name="recipe" type="hidden" value="{{currentRecipeName}}"></input>
+      <input name="src" type="text" value="{{currentSrc}}"></input>
+      <input type="submit" class="btn" value="Change" style="position: relative; bottom: 5px"></input></br>
+      <img width="70%" src="{{transformedImage}}">
     </form>
   </div>
   <div class="span4">

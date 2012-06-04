@@ -2,14 +2,18 @@ package com.capotej.ghettogram
 
 case class Recipe(name: String)
 
-class RecipeAdmin(recipe: String) {
+class RecipeAdmin(recipe: String, src: String) {
 
   def currentRecipeName = {
     recipe
   }
 
-  def src = {
-    ProcessImage("http://i.imgur.com/Pmt0B.jpg", currentRecipeName)
+  def currentSrc = {
+    src
+  }
+
+  def transformedImage = {
+    ProcessImage(src, currentRecipeName)
   }
 
   def currentRecipe = {
