@@ -5,10 +5,11 @@ import java.io._
 
 object ProcessImage {
 
-  def apply(src:String) = {
+  def apply(src:String, filter:String) = {
     val pi = new ProcessImage
     pi.src = Some(src)
-    pi.bytes
+    pi.filter = Some(filter)
+    pi.path
   }
 
 }
@@ -18,6 +19,7 @@ class ProcessImage {
   var inputPath:Option[String] = None
   var outputPath:Option[String] = None
   var src:Option[String] = None
+  var filter:Option[String] = None
 
   def rand = {
     Math.abs(scala.util.Random.nextInt)
@@ -39,17 +41,17 @@ class ProcessImage {
     }
   }
 
-  def contrast {
-    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -sigmoidal-contrast 15x30% " + o))
-  }
+  // def contrast {
+  //   applyFilter((i,o) => cmd("convert " + i + " -quality 15 -sigmoidal-contrast 15x30% " + o))
+  // }
 
-  def vignette {
-    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -matte -background none -vignette 0x3 " + o))
-  }
+  // def vignette {
+  //   applyFilter((i,o) => cmd("convert " + i + " -quality 15 -matte -background none -vignette 0x3 " + o))
+  // }
 
-  def painting {
-    applyFilter((i,o) => cmd("convert " + i + " -quality 15 -paint 1 " + o))
-  }
+  // def painting {
+  //   applyFilter((i,o) => cmd("convert " + i + " -quality 15 -paint 1 " + o))
+  // }
 
   def download {
     src foreach { rawUrl =>
@@ -61,12 +63,21 @@ class ProcessImage {
     }
   }
 
-  def bytes = {
+  def path = {
     download
-    contrast
-    painting
-    vignette
-    outputPath.get.split("/").last.mkString
+    val name = filter.get
+    println("geting " + name + " from db")
+    val content = ImageRecipes.db.get(name)
+    if (content != null) {
+      try {
+        applyFilter((i,o) => cmd(content.replace("{{i}}", i).replace("{{o}}", o)))
+      } catch {
+        case e: Exception => println(e)
+      }
+      outputPath.get.split("/").last.mkString
+    } else {
+      inputPath.get
+    }
   }
 
 }

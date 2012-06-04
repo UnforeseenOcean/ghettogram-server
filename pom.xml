@@ -18,7 +18,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.9.1</scala.version>
+    <scala.version>2.9.2</scala.version>
   </properties>
 
   <repositories>
@@ -59,6 +59,17 @@
       <artifactId>commons-fileupload</artifactId>
       <version>1.2.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>jline</artifactId>
+      <version>${scala.version}</version>
+    </dependency>
+    <dependency>
+  <groupId>org.fusesource.jdbm</groupId>
+  <artifactId>jdbm</artifactId>
+  <version>2.0.1</version>
+</dependency>
+
 
   </dependencies>
 

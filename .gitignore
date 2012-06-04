@@ -7,8 +7,6 @@ syntax: glob
 #*.off
 *.old
 logs*
-
-# eclipse conf file
 .settings
 .classpath
 .project
