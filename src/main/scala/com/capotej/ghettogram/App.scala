@@ -10,7 +10,7 @@ object App {
 
     get("/") { r =>
       val recipe = r.params.get("recipe").getOrElse("contrast")
-      val src = r.params.get("src").getOrElse("http://i.imgur.com/D3XNI.jpg")
+      val src = r.params.get("src").getOrElse("http://i.imgur.com/Pmt0B.jpg")
       val ra = new RecipeAdmin(recipe, src)
       render(path="index.mustache", exports=ra)
     }
