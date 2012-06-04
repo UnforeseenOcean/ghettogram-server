@@ -1,7 +1,7 @@
 <div class="row">
   <div class="span8">
     <form action="/saveRecipe" method="post">
-      <h1>Recipe: <input type="text" name="name" value="{{currentRecipeName}}"></input></h1><br/>
+      <h1>Recipe: <input type="text" name="name" value="{{currentRecipeName}}"></input>(<a href="/remove?recipe={{currentRecipeName}}">delete</a>)</h1></br>
       <input name="content" type="text" style="width: 400px" value="{{currentRecipe}}"></input>
       <input type="submit" class="btn" style="position: relative; bottom: 5px"></input><hr>
       <img width="70%" src="{{src}}">

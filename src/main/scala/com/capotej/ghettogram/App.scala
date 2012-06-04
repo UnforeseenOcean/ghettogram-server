@@ -19,10 +19,22 @@ object App {
       if (name.isDefined && content.isDefined) {
         ImageRecipes.db.put(name.get, content.get)
         ImageRecipes.save
-        redirect("/?filter=" + name.get)
+        redirect("/?recipe=" + name.get)
       } else {
         response(status=500, body="sucks")
       }
+    }
+
+    get("/remove") { r =>
+      println("heyyyyyyyyyyyyy")
+      val name = r.params.get("recipe")
+      println(name)
+      if (name.isDefined) {
+        println("deleting" + name)
+        ImageRecipes.db.remove(name.get)
+        ImageRecipes.save
+      }
+      redirect("/")
     }
 
     get("/img") { r =>

@@ -25,12 +25,14 @@ class ProcessImage {
     Math.abs(scala.util.Random.nextInt)
   }
 
-  def cmd(str: String) = {
-    println("running " + str)
-    val cmdline = CommandLine.parse(str)
-    val executor = new DefaultExecutor
-    executor.setWorkingDirectory(new java.io.File("."))
-    executor.execute(cmdline)
+  def cmd(str: String) {
+    if (str.startsWith("convert")) {
+      println("running " + str)
+      val cmdline = CommandLine.parse(str)
+      val executor = new DefaultExecutor
+      executor.setWorkingDirectory(new java.io.File("."))
+      executor.execute(cmdline)
+    }
   }
 
   def applyFilter(f: Function2[String, String, Unit]) {
@@ -58,7 +60,10 @@ class ProcessImage {
       val url = rawUrl.toLowerCase
       if(url.contains("jpg") || url.contains("png") || url.contains("jpeg")){
         inputPath = Some("/tmp/" + rand)
-        cmd("curl -o " + inputPath.get + " " + rawUrl)
+        val cmdline = CommandLine.parse("curl -o " + inputPath.get + " " + rawUrl)
+        val executor = new DefaultExecutor
+        executor.setWorkingDirectory(new java.io.File("."))
+        executor.execute(cmdline)
       }
     }
   }

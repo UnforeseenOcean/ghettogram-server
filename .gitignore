@@ -12,7 +12,7 @@ logs*
 .project
 .manager
 .scala_dependencies
-
+public/*
 # idea
 .idea
 *.iml
