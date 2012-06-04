@@ -26,11 +26,8 @@ object App {
     }
 
     get("/remove") { r =>
-      println("heyyyyyyyyyyyyy")
       val name = r.params.get("recipe")
-      println(name)
       if (name.isDefined) {
-        println("deleting" + name)
         ImageRecipes.db.remove(name.get)
         ImageRecipes.save
       }
